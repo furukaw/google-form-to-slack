@@ -19,7 +19,9 @@ Google Forms のフォームの回答が送信された時に、Slack チャン�
 <img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180403/20180403160604.png" width="252px">
 <br/><br/>
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408163626.png">もしもこのような画面になったら、「**View App Directory**」をクリック
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408163626.png" width="793px">
+
+もしもこのような↑画面になったら、「**View App Directory**」をクリック
 
 
 新しいタブが出たら、
@@ -27,18 +29,18 @@ Google Forms のフォームの回答が送信された時に、Slack チャン�
 - 検索ボックスに「**Incoming Webhooks**」と入力
 - 「**着信 web フック**」（英語：Incoming Webhooks）をクリック
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408141130.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408141130.png" width="795px">
 <br/><br/>
 
 - 「**設定を追加**」（英語：**Add Configuration**）をクリック
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408141344.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408141344.png" width="799px">
 <br/><br/>
 
 - 使いたいチャンネル名が表示されていることを確認
 - 「**着信 Web フック インテグレーションの追加**」（英語：**Add Incoming WebHooks integration**）をクリック
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408141609.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408141609.png" width="801px">
 <br/><br/>
 
 - **Webhook URL** をコピーして、どこかに貼り付けておく（後で使います）
@@ -54,7 +56,7 @@ Google Forms のフォームの回答が送信された時に、Slack チャン�
 #### スクリプトエディタを開く
 
 - 使いたいフォームを開く
-- 右上の点<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408145240.png">をクリック
+- 右上の点<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408145240.png" width="16px">をクリック
 - 出てきたメニューの「**スクリプト エディタ**」をクリック
 
 <img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408145034.png">
@@ -76,81 +78,7 @@ function myFunction() {
 ```
 　　を消す
 
-- その跡地に、**下のスクリプト全部**をそのまま貼り付ける
-
-```JavaScript
-function sendToSlack(fallback, fields, channel) {
-  const url = "■１■"
-  const data = {
-    "channel" : channel,
-    "username" : "Googleフォーム Bot",  // 1: bot 名
-    "attachments" : [{
-      "fallback" : fallback,
-      "text" : "★３★",
-      "fields": fields,
-      "color": "good",  // 3: 左線の色
-    }],
-    "icon_emoji" : ":envelope_with_arrow:"  // 2: アイコン画像
-  };
-  const payload = JSON.stringify(data);
-  const options = {
-    "method" : "POST",
-    "contentType" : "application/json",
-    "payload" : payload,
-    "muteHttpExceptions": true,
-  };
-  const response = UrlFetchApp.fetch(url, options);
-  Logger.log(response)
-}
-
-function test() {
-  sendToSlack("テスト通知確認です", [], "■２■");
-}
-
-function responseToText(itemResponse) {
-  switch (itemResponse.getItem().getType()) {
-    case FormApp.ItemType.CHECKBOX:
-      return itemResponse.getResponse().join("\n");
-      break;
-    case FormApp.ItemType.GRID:
-      const gridResponses = itemResponse.getResponse();
-      return itemResponse.getItem().asGridItem().getRows().map(function(rowName, index) {
-        Logger.log(rowName);
-        return rowName + ": " + gridResponses[index];
-      }).join("\n");
-      break;
-    case FormApp.ItemType.CHECKBOX_GRID:
-      const checkboxGridResponses = itemResponse.getResponse()
-      return itemResponse.getItem().asCheckboxGridItem().getRows().map(function(rowName, index) {
-        Logger.log(rowName);
-        return rowName + ": " + checkboxGridResponses[index];
-      }).join("\n");
-      break;
-    default:
-      return itemResponse.getResponse();
-  }
-}     
-
-function onFormSubmit(e){
-  const itemResponses = e.response.getItemResponses();
-
-  const fallback = itemResponses.map(function(itemResponse) {
-    return itemResponse.getItem().getTitle() + ": " + itemResponse.getResponse();
-  }).join("\n");
-  
-  const fields = itemResponses.map(function(itemResponse) {
-    const value = responseToText(itemResponse);
-    return {
-      "title": itemResponse.getItem().getTitle(),
-      "value": value,
-      "short": false,  // 4: 左右２列で表示
-    }
-  });
-
-  sendToSlack(fallback, fields, "■２■");
-}
-
-```
+- その跡地に、[script.gs](./script.gs) をそのまま貼り付ける
 
 #### Slack の情報を貼り付ける
 
@@ -176,13 +104,13 @@ function onFormSubmit(e){
 - 左上の「**ファイル**」をクリック
 - 出てきたメニューの「**保存**」をクリック
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408151614.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408151614.png" width="463px">
 <br/><br/>
 
 - 適当な名前（基本的に使いません）を入力
 - 「**OK**」をクリック
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408152012.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408152012.png" width="646px">
 <br/><br/>
 
 ## テスト
@@ -191,12 +119,12 @@ function onFormSubmit(e){
 - コードの上にある、「**関数を選択**」をクリック
 - 出てきたメニューから「**test**」をクリック
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408152643.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408152643.png" width="489px">
 
 
 - 今のメニューの左の**虫ボタン**をクリック
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408153118.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408153118.png" width="745px">
 <br/><br/>
 
 - ログインを求められたらログイン、許可を求められたら許可する
@@ -205,7 +133,7 @@ function onFormSubmit(e){
 
 - Slack を開いてメッセージを確認する
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408153332.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408153332.png" width="453px">
 <br/><br/>
 
 さっき★３★のところに書いたタイトルが出ています。これで Slack との接続成功です。
@@ -219,7 +147,7 @@ function onFormSubmit(e){
 - スクリプト画面を開く
 - 「関数を選択」だった部分を、「test」から「**onFormSubmit**」に変更する
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408155255.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408155255.png" width="489px">
 <br/><br/>
 
 - **時計**のようなボタンをクリック
@@ -237,7 +165,7 @@ function onFormSubmit(e){
 - 承認を求められたら承認する
 - スクリプトをもう一度保存する
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408161254.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408161254.png" width="400px">
 <br/><br/>
 
 これで全て完成しました。
@@ -250,13 +178,13 @@ function onFormSubmit(e){
 - さっき開いたフォームのタブに戻る
 - 上の**目ボタン**をクリック
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408153854.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408153854.png" width="380px">
 <br/><br/>
 
 - フォームを埋めて送信する
 - Slack を確認する
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408170628.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408170628.png" width="720px">
 こんな感じです。完成です。
 
 # カスタマイズ
@@ -264,13 +192,13 @@ function onFormSubmit(e){
 
 #### Slackで表示される、メッセージの送信者名を変更
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408171632.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408171632.png" width="327px">
 
 スクリプトの、**// 1: bot 名** と書いてある行（５行目）の、`Googleフォーム Bot` を書き換えてください。
 
 #### アイコン画像を変更
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408171639.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408171639.png" width="305px">
 
 スクリプトの、**// 2: アイコン画像** と書いてある行（12行目）を書き換えます。
 
@@ -288,14 +216,14 @@ Slack メッセージの画像に緑の縦線がありますが、この色は�
 
 スクリプトの、**// 3: 左線の色** と書いてある行（10行目）の `good` を、`#000000` 〜 `#FFFFFF` に変更すれば色が変わります。
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408172551.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408172551.png" width="356px">
 
 `#000000` （黒色）にした場合
 
 #### 左右２列で表示するようにする
 
 もしかすると、右上のこのへんの空白が無駄だと思われるかもしれません。
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408172658.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408172658.png" width="720px">
 
 そこで、Slack では項目を**左右２列に分けて表示**させることができます。
 その設定は Google フォームのスクリプトの中でします。
@@ -304,13 +232,13 @@ Slack メッセージの画像に緑の縦線がありますが、この色は�
 
 - **全部２列**で表示する場合 `true`
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408173920.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408173920.png" width="588px">
 
 
 - **答えが30文字未満だった項目だけ２列にして、長い項目はそのまま**にする場合 `value.length < 30`
     - 文字数 `30` は自由に書き換えてください。
 
-<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408173612.png">
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/t/tsukino95/20180408/20180408173612.png" width="689px">
 
 # 参考
 
